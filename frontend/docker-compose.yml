@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    command: bash -c "npm run build && npm start"

@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+  api-cep:
+    build: .
+    container_name: api
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+    image: node 
+    volumes:
+      - ./api/:/home/node/app/api
+      - ./home/node/app/api/node_modules
+    expose: 
+      - 3001
+    ports:
+      - 3001:3001
+    depends_on: 
+        - redis
+    command: bash -c "cd ./api && npm install && npm run dev"
+  frontend:
+    container_name: frontend
+    build: .
+    volumes:
+        - './frontend/:/home/node/app/frontend'
+        - '/home/node/app/frontend/node_modules'
+    ports:
+        - 3000:3000
+    depends_on: 
+        - api-cep
+    command: bash -c "cd ./frontend && npm run build && npm start"
+
+        

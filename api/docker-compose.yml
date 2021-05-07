@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  redis:
+    image: redis
+    container_name: api-cep-cache
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+  web:
+    build: .
+    links: 
+      - redis
+    container_name: api-cep
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+    depends_on: 
+      - redis
+    image: node
+    volumes:
+      - ./:/home/node/app
+      - ./home/node/app/node_modules
+    expose:
+      - 3001
+    ports:
+      - 3001:3001
+    command: bash -c "npm run build && npm run dev"
