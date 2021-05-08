@@ -1,4 +1,6 @@
+import { Request, Response } from "restify";
+
 export interface IRoutes {
-    index(): object,
-    ping(): object,
+    index(req: Request, res: Response): void,
+    ping(req: Request, res: Response): void,
 }

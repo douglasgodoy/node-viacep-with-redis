@@ -3,9 +3,9 @@ import { RedisClient } from "redis"
 import { IHttpRequest } from "../interfaces/IHttp"
 
 class Cep {
-    async getAddress(req: IHttpRequest, redis: RedisClient): Promise<object> {
+    async getAddress(req: { cep: string }, redis: RedisClient): Promise<object> {
         try {
-            const { cep } = req.body
+            const { cep } = req
             const getData:string = await new Promise((resolve, reject): void => {
                 redis.get(cep, (err, res) => {
                     if (err) reject(err)
@@ -19,7 +19,7 @@ class Cep {
                     resolve(res)
                 })
             })
-
+            
             if (!getData) {
                 const obj = await this.requestApi(cep)
                 console.log(await setData(obj));
@@ -29,6 +29,7 @@ class Cep {
 
             return JSON.parse(getData)
         } catch (error) {
+            console.log(`error in request: ${error}`);
             return new Error(`error in request: ${error}`)
         }
     }

@@ -1,29 +1,18 @@
 require('dotenv').config()
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify'
+import { Server } from 'restify';
+import * as restify from 'restify';
 import { RedisClient } from 'redis'
 import Redis from './db/redis/Redis'
 import Routes from './server/Routes'
 
 export default (async () => {
 
-    const opts: RouteShorthandOptions = {
-        schema: {
-            response: {
-                200: {
-                    type: 'object',
-                    properties: {
-                        pong: {
-                            type: 'string'
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     try {
+        const app: Server = restify.createServer();
+        app.use(restify.plugins.queryParser());
+        app.use(restify.plugins.bodyParser());
 
-        const app: FastifyInstance = await Fastify(opts)
+
         const port = process.env.PORT || 3001
         const redis: RedisClient = await (new Redis()).connect()
         new Routes(app, redis)

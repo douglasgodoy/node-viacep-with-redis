@@ -1,5 +1,6 @@
-import { FastifyInstance } from 'fastify'
-import { IHttpRequest } from '../interfaces/IHttp'
+import { Request, RequestHandler, Response, Server } from 'restify';
+
+import { IHttpNext, IHttpRequest, IHttpResponse } from '../interfaces/IHttp'
 import { IRoutes } from '../interfaces/IRoutes'
 import { RedisClient } from 'redis';
 import Cep from '../services/Cep';
@@ -7,23 +8,22 @@ import Cep from '../services/Cep';
 class Routes implements IRoutes {
     public redis
     public cepService
-    constructor(server: FastifyInstance, redis: RedisClient) {
+    constructor(server: Server, redis: RedisClient) {
         this.redis = redis
         this.cepService = new Cep()
-
         server.get('/', this.index)
-        server.post('/', (req: IHttpRequest) => this.cepService.getAddress(req, redis))
+        server.post('/', async (req: Request, res: Response) => res.send(await this.cepService.getAddress(req.body, redis)))
         server.get('/ping', this.ping)
     }
 
-    async index(): Promise<object> {
-        return { hello: 'world' }
+    index(req: Request, res: Response): void {
+        res.send({ hello: 'world' });
     }
 
 
-    async ping(): Promise<object> {
+    ping(req: Request, res: Response): void {
         console.log('pong');
-        return { pong: 'it worked!' }
+        res.send({ pong: 'it worked!' })
     }
 }
 
