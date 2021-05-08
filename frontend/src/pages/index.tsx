@@ -2,6 +2,11 @@ import styled from 'styled-components';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputMask from 'react-input-mask';
+import axios from 'axios';
+import { useState } from 'react';
+import Result from '../components/Result'
+
+
 
 const DivMain = styled.div`
     width:80vw;
@@ -37,21 +42,48 @@ const Awesome = styled(FontAwesomeIcon)`
     cursor:pointer;
 `;
 
+const sendRequest = async (value: string) => {
+    try {
+        const cep: string = value || "";
+        if (!cep) return false;
+        const sanitizeCep = cep.match(/[0-9]/g);
+        if (sanitizeCep !== null && sanitizeCep.join("").length !== 8) return false;
+
+
+        const { data } = await axios.post('http://localhost:3001/', { cep })
+
+        return data?.erro ? false : data;
+    } catch (error) {
+        console.log('error', error);
+
+    }
+
+
+}
+
 export default function Main() {
+    const [inputValue, setInputValue] = useState("")
+    const [result, setResult] = useState("");
+    console.log(result);
+
     return (
         <DivMain>
             <DivForm>
                 <DivSearchCep>
-                    <InputCep mask="99999-999" />
+                    <InputCep mask="99999-999"
+                        onBlur={e => setInputValue(e.target.value)}
+                    />
                     <Awesome
                         icon={faSearch}
                         size="lg"
                         fixedWidth
                         color="#263238"
-                        onClick={e => console.log('passou')}
+                        onClick={async () => setResult(await sendRequest(inputValue))}
                     />
                 </DivSearchCep>
             </DivForm>
+            {result.length || result ? <Result json={JSON.stringify(result)} /> : ''}
+
 
         </DivMain>
     )

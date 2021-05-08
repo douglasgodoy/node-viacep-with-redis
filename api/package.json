@@ -17,15 +17,18 @@
     "dotenv": "^9.0.0",
     "redis": "^3.1.2",
     "restify": "^8.5.1",
+    "restify-cors-middleware2": "^2.1.2",
     "ts-node": "^9.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.1",
     "@babel/preset-typescript": "^7.13.0",
+    "@types/cors": "^2.8.10",
     "@types/node": "^15.0.2",
     "@types/redis": "^2.8.28",
     "@types/restify": "^8.5.1",
+    "@types/restify-cors-middleware": "^1.0.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "nodemon": "^2.0.7",
