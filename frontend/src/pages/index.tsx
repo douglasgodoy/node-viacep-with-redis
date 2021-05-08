@@ -49,9 +49,9 @@ const sendRequest = async (value: string) => {
         const sanitizeCep = cep.match(/[0-9]/g);
         if (sanitizeCep !== null && sanitizeCep.join("").length !== 8) return false;
 
-
+        const initialTime = new Date().getTime();
         const { data } = await axios.post('http://localhost:3001/', { cep })
-
+        data.timerReq = `${new Date().getTime() - initialTime}ms`;
         return data?.erro ? false : data;
     } catch (error) {
         console.log('error', error);

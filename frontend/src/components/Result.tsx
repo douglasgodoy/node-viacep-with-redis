@@ -33,14 +33,13 @@ const DivContent = styled.div`
 
 const sanitizeJson = (json: string) => {
     const separate = json.replace(/({|})/g, "").split(',')
-    console.log(separate);
-
     return separate;
 }
 
 const Paragraph = styled.p`
      margin-left:4rem;
      color:#333;
+     font-style:italic;
 `;
 
 
