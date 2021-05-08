@@ -48,9 +48,9 @@ export default function Result(props: { json: string }) {
         <Div>
             <DivContent>
                 {props.json ? '{' : ""}
-                {sanitizeJson(props.json).map(line => {
+                {sanitizeJson(props.json).map((line, index) => {
                     return (
-                        <Paragraph>{line}</Paragraph>
+                        <Paragraph key={index}>{line}</Paragraph>
                     )
                 })}
                 {props.json ? '}' : ""}

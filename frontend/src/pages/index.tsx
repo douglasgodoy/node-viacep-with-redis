@@ -52,26 +52,39 @@ const sendRequest = async (value: string) => {
         const initialTime = new Date().getTime();
         const { data } = await axios.post('http://localhost:3001/', { cep })
         data.timerReq = `${new Date().getTime() - initialTime}ms`;
+
         return data?.erro ? false : data;
     } catch (error) {
         console.log('error', error);
 
     }
-
-
 }
 
-export default function Main() {
-    const [inputValue, setInputValue] = useState("")
-    const [result, setResult] = useState("");
-    console.log(result);
 
+
+export default function Main() {
+    const [inputValue, setInputValue] = useState("");
+    const [result, setResult] = useState("");
+
+    const handleEnter = async (e: any) => {
+        if (e.key === 'Enter') {
+            const newValue = await sendRequest(inputValue);
+            console.log(newValue);
+            setResult(newValue);
+        }
+    }
+    
     return (
         <DivMain>
             <DivForm>
                 <DivSearchCep>
                     <InputCep mask="99999-999"
                         onBlur={e => setInputValue(e.target.value)}
+                        onKeyUp={async (e) => {
+                            const value = (e.target as HTMLInputElement).value
+                            setInputValue(value);
+                            await handleEnter(e)
+                        }}
                     />
                     <Awesome
                         icon={faSearch}
