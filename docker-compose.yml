@@ -35,6 +35,6 @@ services:
         - 3000:3000
     depends_on: 
         - api-cep
-    command: bash -c "cd ./frontend && npm run build && npm start"
+    command: bash -c "cd ./frontend && npm install && npm run build && npm start"
 
         
